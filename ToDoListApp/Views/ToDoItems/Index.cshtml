@@ -1,0 +1,32 @@
+﻿namespace ToDoListApp.Views.ToDoItems{}
+@model IEnumerable<ToDoListApp.Models.TodoItem>
+
+<h2>To-Do Items</h2>
+<a class="btn btn-primary" href="@Url.Action("Create")">Create New</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Is Completed</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.IsCompleted</td>
+                <td>@item.CreatedAt</td>
+                <td>
+                    <a class="btn btn-secondary" href="@Url.Action("Edit", new { id = item.Id })">Edit</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", new { id = item.Id })">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
