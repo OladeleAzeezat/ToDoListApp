@@ -184,9 +184,11 @@ namespace ToDoListApp.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ToDoItems");
                 });
@@ -320,6 +322,17 @@ namespace ToDoListApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ToDoListApp.Models.TodoItem", b =>
+                {
+                    b.HasOne("ToDoListApp.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
                 });
 #pragma warning restore 612, 618
         }

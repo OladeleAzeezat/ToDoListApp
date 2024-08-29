@@ -12,8 +12,8 @@ using ToDoListApp.Services;
 namespace ToDoListApp.Migrations
 {
     [DbContext(typeof(ToDoDbContext))]
-    [Migration("20240815041349_AddToDoItem")]
-    partial class AddToDoItem
+    [Migration("20240827154920_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -187,9 +187,11 @@ namespace ToDoListApp.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ToDoItems");
                 });
@@ -323,6 +325,17 @@ namespace ToDoListApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ToDoListApp.Models.TodoItem", b =>
+                {
+                    b.HasOne("ToDoListApp.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToDoListApp.Models
 {
@@ -13,6 +14,7 @@ namespace ToDoListApp.Models
         public bool IsCompleted { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string UserId { get; set; }
+        [NotMapped]
         public virtual User user { get; set; }
     }
 }

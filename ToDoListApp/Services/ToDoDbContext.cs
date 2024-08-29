@@ -9,8 +9,5 @@ namespace ToDoListApp.Services
         public ToDoDbContext(DbContextOptions options) : base(options) { }
         
             public DbSet<TodoItem> ToDoItems { get; set; }
-    
-
-    
     }
 }

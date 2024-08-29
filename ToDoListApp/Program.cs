@@ -4,6 +4,7 @@ using ToDoListApp.Services;
 using Microsoft.AspNetCore.Identity;
 using ToDoListApp.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,15 @@ builder.Services.AddDbContext<ToDoDbContext>(options =>
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseSqlServer(connectionString);
 });
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Other settings...
+
+    // Disable email confirmation requirement
+    options.SignIn.RequireConfirmedAccount = false;
+});
+
+
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ToDoDbContext>();
 
@@ -35,6 +45,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

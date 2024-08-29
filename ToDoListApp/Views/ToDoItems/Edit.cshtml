@@ -1,6 +1,92 @@
-﻿namespace ToDoListApp.Views.ToDoItems
+﻿@*namespace ToDoListApp.Views.ToDoItems
 {
     public class Edit
     {
     }
+}*@
+
+@model ToDoListApp.Models.TodoItem
+
+<h2>Edit To-Do Item</h2>
+
+<form id="editTodoForm">
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" id="title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control" id="description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsCompleted" class="control-label"></label>
+        <input asp-for="IsCompleted" type="checkbox" id="isCompleted" />
+        <span asp-validation-for="IsCompleted" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CreatedAt" class="control-label"></label>
+        <input asp-for="CreatedAt" class="form-control" type="datetime-local" id="createdAt" />
+        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+    </div>
+  @*  <div class="form-group">
+        <label asp-for="UserId" class="control-label">Id</label>
+        <input asp-for="UserId" class="form-control" id="userId" />
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>*@
+    @*<input type="hidden" id="userEmail" value="@User.Identity.Name)"/> @*.FindFirstValue(ClaimTypes.NameIdentifie*@
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <div id="error-message" class="text-danger"></div> <!-- Error message element -->
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.getElementById("editTodoForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var title = document.getElementById("title").value;
+            var description = document.getElementById("description").value;
+            var isCompleted = document.getElementById("isCompleted").checked;
+            var createdAt = document.getElementById("createdAt").value;
+            //var userId = document.getElementById("userId").value;
+
+            // Assuming you have the ID of the to-do item available in a hidden field or another method
+            var todoId = '@Model.Id'; // Use the correct ID here
+
+            fetch(`/api/EditById/${todoId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: todoId,
+                    title: title,
+                    description: description,
+                    isCompleted: isCompleted,
+                    createdAt: createdAt,
+                    //userId: userId
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("To-do item updated successfully!");
+                        window.location.href = '/ToDoItems/Index'; // Redirect to the to-do list page
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.error || 'Update failed');
+                        });
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("error-message").innerText = error.message; // Display error message
+                });
+        });
+    </script>
 }
+
+
+
